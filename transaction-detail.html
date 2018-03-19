@@ -1,0 +1,39 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet'>
+    <link href="css/dashboard.css" rel="stylesheet" />
+
+</head>
+
+<div class="site-container">
+    <div class="site-pusher">
+
+        <header class="header">
+
+            <a href="#" class="header__icon" id="header__icon"></a>
+            <a href="#" class="header__logo">BudgetTracker</a>
+
+            <nav class="menu">
+                <a href="dashboard.html">Home</a>
+                <a href="transactions.html">Transactions</a>
+                <a href="add-transaction.html">Add Transaction</a>
+                <a href="login.html">Logout</a>
+            </nav>
+
+        </header>
+
+        <div class="site-content">
+            <div class="container">
+                <div id="transaction--detail">
+
+                </div>
+            </div> <!-- END container -->
+        </div> <!-- END site-content -->
+        <div class="site-cache" id="site-cache"></div>
+    </div> <!-- END site-pusher -->
+</div> <!-- END site-container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="resources/underscore-min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/transaction-detail.js"></script>

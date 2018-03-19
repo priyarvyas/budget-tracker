@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<!--<html>-->
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="email_div">
+            <label>Username</label> <br>
+            <input type="email" name="email" class="textInput" id="idTxtEmail" placeholder="demo">
+            <div id="email_error"></div>
+        </div>
+        <div id="password_div">
+            <label>Password</label> <br>
+            <input type="password" name="password" class="textInput" id="idTxtPswd" placeholder="demo">
+        </div>
+
+        <div>
+            <input type="button" name="login" value="Login" class="btn" id="idBtnLogin" onclick="check(this.form)">
+        </div>
+        <div>
+            <span>No account ? <a href="registration.html"><input type="button" name="Signup" value="Signup" class="btn"></a></span>
+        </div>
+    </div>
+</body>       
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/validation.js"></script>
