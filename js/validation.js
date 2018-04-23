@@ -6,14 +6,27 @@ $(document).ready(function () {
     (function ($) {
         $('#idBtnLogin').click(function (e) {
             //e.preventDefault();
-            var vEmail = document.getElementById('idTxtEmail').value;
-            var vPswd = document.getElementById('idTxtPswd').value;
-            if (vEmail == "demo" && vPswd == "demo") {
-                location.href = 'dashboard.html';
+            var vEmail = document.getElementById('idTxtEmail');
+            var vPswd = document.getElementById('idTxtPswd');
+            //if (vEmail == "demo" && vPswd == "demo") {
+            //    location.href = 'dashboard.html';
+            //}
+            //else
+            if (vEmail.textContent.length < 5) {
+                alert("Username field must be at least 5 characters long");
             }
-            else {
-                alert("Wrong Password... Please enter demo as a username and password")
+            if (vEmail.innerHTML.length == 0 && vPswd.innerHTML.length == 0) {
+                alert("Please enter username and password");
             }
+            else if (vEmail.innerHTML.length < 5) {
+                alert("Username field must be at least 5 characters long");
+            }
+            else if (vPswd.innerHTML.length < 4) {
+                alert("Password field must be at least 4 characters long");
+            }
+            //else {
+            //    alert("Wrong Password... Please enter demo as a username and password")
+            //}
         });
 
 
