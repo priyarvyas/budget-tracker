@@ -1,21 +1,25 @@
-var id = getUrlParameter('id');
-var detailData = _.findWhere(data, { id: id });
+var http = new XMLHttpRequest();
+var url = "http://127.0.0.1:8000/api/categories/";
+http.open("GET", url, true);
 
-if (detailData != null || detailData != undefined) {
-    var htmlStr = '<h1>' + detailData.name + '</h1>'
-        + '<h2>' + detailData.loc + '</h2>'
-        + '<h3>' + months[detailData.month - 1] + '</h3>';
-    if (detailData.type == 'Credit') {
-        htmlStr = htmlStr + '<p class="type--credit"> $' + detailData.value + '</p>';
-    } else {
-        htmlStr = htmlStr + '<p class="type--debit"> $' + detailData.value + '</p>';
+//Send the proper header information along with the request
+http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+http.setRequestHeader("Authorization", "token " + localStorage.getItem('token'));
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+        var resData = JSON.parse(http.responseText);
+        createCategoryList(resData);
     }
-    document.getElementById('transaction--detail').innerHTML = htmlStr;
 }
+http.send();
 
-for (var key in months) {
-    var month = months[key];
-    var value = parseInt(key) + 1;
-    var option = $('<option value="' + value + '"> ' + month + '</option>');
-    $('#input--month').append(option);
+function createCategoryList(data) {
+    var select = document.getElementById("categoryList");
+    for(var d in data) {
+        var option = document.createElement('option');
+        option.value = data[d].id;
+        option.text = data[d].name;
+        select.appendChild(option);
+    }
 }

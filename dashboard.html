@@ -16,6 +16,7 @@
             <nav class="menu">
                 <a href="#">Home</a>
                 <a href="transactions.html">Transactions</a>
+                <a href="categories.html">Categories</a>
                 <a href="add-transaction.html">Add Transaction</a>
                 <a href="login.html">Logout</a>
             </nav>
@@ -25,7 +26,7 @@
         <div class="site-content">
             <div class="container">
 
-                <h1>Hello user,</h1>
+                <h1 id="bindUser"></h1>
 
                 <div id="dashboard--transaction--list">
 
@@ -41,3 +42,6 @@
 <script src="resources/underscore-min.js"></script>
 <script src="js/common.js"></script>
 <script src="js/dashboard.js"></script>
+<script>
+    document.getElementById('bindUser').innerHTML = "Hello " + localStorage.getItem('user');
+</script>

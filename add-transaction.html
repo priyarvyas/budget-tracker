@@ -16,6 +16,7 @@
             <nav class="menu">
                 <a href="dashboard.html">Home</a>
                 <a href="transactions.html">Transactions</a>
+                <a href="categories.html">Categories</a>
                 <a href="#">Add Transaction</a>
                 <a href="login.html">Logout</a>
             </nav>
@@ -25,18 +26,18 @@
         <div class="site-content">
             <div class="container">
                 <div id="wrapper">
-                    <form>
+                    <div>
                         <div>Name: <input type="text" class="textInput" id="name" name="name" required /></div>
-                        <div>Description: <textarea rows="4" class="textInput" id="desc"></textarea></div>
-                        <div>Location: <input type="text" class="textInput" id="loc" name="loc" required /></div>
-                        <div>Month: <select id="input--month"></select></div>
-                        <div>Transaction Type <select>
-                              <option value="Credit">Credit</option>
-                              <option value="Debit">Debit</option>
+                        <div>Category: <select id="categoryList">
+
+                        </select></div>
+                        <div>Transaction Type <select id="type">
+                              <option value="1">Debit</option>
+                              <option value="2">Credit</option>
                               </select></div>
-                        <div>$ <input type="number" class="textInput" min="0" value="0"/></div>
-                        <button type="submit" class="btn">Create</button>
-                    </form>
+                        <div>$ <input type="number" id="value" class="textInput" min="0" value="0"/></div>
+                        <button onclick="addTransaction()" class="btn">Create</button>
+                    </div>
                 </div>
             </div> <!-- END container -->
         </div> <!-- END site-content -->
@@ -48,3 +49,27 @@
 <script src="resources/underscore-min.js"></script>
 <script src="js/common.js"></script>
 <script src="js/transaction-detail.js"></script>
+<script>
+    function addTransaction() {
+        var name = document.getElementById('name');
+        var category = document.getElementById('categoryList');
+        var type = document.getElementById('type');
+        var value = document.getElementById('value');
+
+        var http = new XMLHttpRequest();
+        var url = "http://127.0.0.1:8000/api/transactions/add/";
+        var params = {'name': name.value, 'category': category.selectedIndex, 'type': type.selectedIndex, 'value': value.value};
+        http.open("POST", url, true);
+
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                location.href = "transactions.html";
+            }
+        }
+        http.send(JSON.stringify(params));
+    }
+
+</script>

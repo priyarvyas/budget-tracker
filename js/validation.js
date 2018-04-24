@@ -8,25 +8,24 @@ $(document).ready(function () {
             //e.preventDefault();
             var vEmail = document.getElementById('idTxtEmail');
             var vPswd = document.getElementById('idTxtPswd');
-            //if (vEmail == "demo" && vPswd == "demo") {
-            //    location.href = 'dashboard.html';
-            //}
-            //else
-            if (vEmail.textContent.length < 5) {
-                alert("Username field must be at least 5 characters long");
+            var http = new XMLHttpRequest();
+            var url = "http://127.0.0.1:8000/login/";
+            var params = {'email': vEmail.value, 'password': vPswd.value};
+            http.open("POST", url, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    var resData = JSON.parse(http.responseText);
+                    localStorage.setItem('user', resData.username);
+                    localStorage.setItem('token', resData.token);
+                    location.href = 'dashboard.html';
+                }
             }
-            if (vEmail.innerHTML.length == 0 && vPswd.innerHTML.length == 0) {
-                alert("Please enter username and password");
-            }
-            else if (vEmail.innerHTML.length < 5) {
-                alert("Username field must be at least 5 characters long");
-            }
-            else if (vPswd.innerHTML.length < 4) {
-                alert("Password field must be at least 4 characters long");
-            }
-            //else {
-            //    alert("Wrong Password... Please enter demo as a username and password")
-            //}
+            http.send(JSON.stringify(params));
+            alert("user not found");
         });
 
 

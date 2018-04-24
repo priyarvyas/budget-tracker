@@ -2,9 +2,23 @@
 $(document).ready(function () {
 
     (function ($) {
-        var topFourData = _.sortBy(data, 'month').reverse();
-        createTransactionList(topFourData);
-        
+        var http = new XMLHttpRequest();
+        var url = "http://127.0.0.1:8000/api/transactions/";
+        http.open("GET", url, true);
+
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        http.setRequestHeader("Authorization", "token " + localStorage.getItem('token'));
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                var resData = JSON.parse(http.responseText);
+                createTransactionList(resData);
+            }
+        }
+        http.send();
+
+
         $('#header__icon').click(function (e) {
             e.preventDefault();
             $('body').toggleClass('with--sidebar');
@@ -16,26 +30,20 @@ $(document).ready(function () {
 
     })(jQuery);
 
-    $('.detail--link').click(function () {
-        console.log($(this));
-        var id = $(this).attr('data-id');
-        window.open('transaction-detail.html?id='+id);   
-    });
-
 });
 
 var createTransactionList = function (arrData) {
     for (var key in arrData) {
         var name = arrData[key].name;
-        var loc = arrData[key].loc;
         var type = arrData[key].type;
-        var month = arrData[key].month;
+        var category = arrData[key].category;
+        var month = arrData[key].created_at;
         var value = arrData[key].value;
         var badge = document.createElement('div');
         badge.className = 'badge';
         var htmlStr =
             '<div>' + name +
-            '<small class="location">' + loc + '</small>' + '<small class="location">' + type + '</small>' + '<small class="location">' + months[(month - 1)] + '</small>' + '</div>';
+            '<small class="location">' + category + '</small>' + '<small class="location">' + type + '</small>' + '<small class="location">' + months[(month - 1)] + '</small>' + '</div>';
         if (type == 'Credit') {
             htmlStr = htmlStr + '<p class="type--credit"> $' + value + '</p>';
         } else {

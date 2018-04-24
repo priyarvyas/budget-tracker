@@ -1,48 +1,58 @@
-var selectMonth = document.getElementById("month--select");
 
 $(document).ready(function () {
-    var option = $('<option value=0>All</option>');
-    $(selectMonth).append(option);
-    for (var key in months) {
-        var month = months[key];
-        var value = parseInt(key) + 1;
-        var option = $('<option value="' + value + '"> ' + month + '</option>');
-        $(selectMonth).append(option);
-    }
 
-    $(selectMonth).change(function (e) {
-        var month = parseInt($(this).val());
-        document.getElementById("dashboard--transaction--list").innerHTML = "";
-        if (month > 0) {
-            var filterMonth = _.where(data, { month: month });
-            createTransactionList(filterMonth);
-        } else {
-            createTransactionList(data);
+    (function ($) {
+        var http = new XMLHttpRequest();
+        var url = "http://127.0.0.1:8000/api/transactions/";
+        http.open("GET", url, true);
+
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        http.setRequestHeader("Authorization", "token " + localStorage.getItem('token'));
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                var resData = JSON.parse(http.responseText);
+                createTransactionList(resData);
+            }
         }
-    });
+        http.send();
 
-    $('#transaction--type').change(function (e) {
-        var type = $(this).val();
-        document.getElementById("dashboard--transaction--list").innerHTML = "";
-        if (type=='Credit' || type=='Debit') {
-            var filterType = _.where(data, { type: type });
-            createTransactionList(filterType);
-        } else {
-            createTransactionList(data);
-        }
-    });
-
-    $('#location--input').keyup(function (e) {
-        var loc = $(this).val().toLowerCase().split(' ').join('');
-        var filterLoc = _.filter(data, function (item) {
-            var toCompare = item.loc.toLowerCase();
-            return toCompare.indexOf(loc) != -1;
+        $('#header__icon').click(function (e) {
+            e.preventDefault();
+            $('body').toggleClass('with--sidebar');
         });
-        document.getElementById("dashboard--transaction--list").innerHTML = "";
-        createTransactionList(filterLoc);
-    });
-    
+
+        $('#site-cache').click(function (e) {
+            $('body').removeClass('with--sidebar');
+        });
+
+    })(jQuery);
+
 });
+
+var createTransactionList = function (arrData) {
+    for (var key in arrData) {
+        var name = arrData[key].name;
+        var type = arrData[key].type;
+        var category = arrData[key].category;
+        var month = arrData[key].created_at;
+        var value = arrData[key].value;
+        var badge = document.createElement('div');
+        badge.className = 'badge';
+        var htmlStr =
+            '<div>' + name +
+            '<small class="location">' + category + '</small>' + '<small class="location">' + type + '</small>' + '<small class="location">' + months[(month - 1)] + '</small>' + '</div>';
+        if (type == 'Credit') {
+            htmlStr = htmlStr + '<p class="type--credit"> $' + value + '</p>';
+        } else {
+            htmlStr = htmlStr + '<p class="type--debit"> $' + value + '</p>';
+        }
+        htmlStr = htmlStr + '<a class="detail--link" data-id="' + arrData[key].id +'">details</a>';
+        badge.innerHTML = htmlStr;
+        document.getElementById("dashboard--transaction--list").appendChild(badge);
+    }
+}
 
 
 

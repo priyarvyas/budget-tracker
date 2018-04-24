@@ -15,8 +15,8 @@
 
             <nav class="menu">
                 <a href="dashboard.html">Home</a>
-                <a href="#">Transactions</a>
-                <a href="categories.html">Categories</a>
+                <a href="transactions.html">Transactions</a>
+                <a href="#">Categories</a>
                 <a href="add-transaction.html">Add Transaction</a>
                 <a href="login.html">Logout</a>
             </nav>
@@ -25,7 +25,8 @@
 
         <div class="site-content">
             <div class="container">
-                <div id="dashboard--transaction--list" style="margin: 100px 0;">
+                <a href="add-category.html">Add Category</a>
+                <div id="category--list" style="margin: 100px 0;">
 
                 </div>
 
@@ -37,6 +38,32 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="resources/underscore-min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/transactions.js"></script>
+<script>
+
+    var http = new XMLHttpRequest();
+    var url = "http://127.0.0.1:8000/api/categories/";
+    http.open("GET", url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+    http.setRequestHeader("Authorization", "token " + localStorage.getItem('token'));
+
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            var resData = JSON.parse(http.responseText);
+            createCategoryList(resData);
+        }
+    }
+    http.send();
+
+    function createCategoryList(data) {
+        var catList = document.getElementById("category--list");
+        var htmlStr = "";
+        for(var d in data) {
+            htmlStr += "<div>" + data[d].name + "</div>";
+        }
+        catList.innerHTML = htmlStr;
+    }
+
+
+</script>
